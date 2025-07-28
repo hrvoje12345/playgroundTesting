@@ -1,17 +1,19 @@
 {
-  "name": "playgroundtesting",
+  "name": "fullstack-engineer-task",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "You need to create a fullstack TypeScript application using React and Express with PostgreSQL that displays the events fetched from the Google Calendar API",
+  "author": "Hrvoje Kukolj",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "npm run test --workspaces --if-present"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^8.38.0",
     "@typescript-eslint/parser": "^8.38.0",
-    "eslint": "^9.32.0"
-  }
+    "eslint": "^9.32.0",
+    "prettier": "3.6.2"
+  },
+  "workspaces": [
+    "backend",
+    "frontend"
+  ]
 }
