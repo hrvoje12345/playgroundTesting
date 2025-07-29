@@ -20,8 +20,8 @@ export const EventsList: FC<EventsListProps> = ({
   handleDaysRangeSubmit,
 }) => {
   return (
-    <>
-      <h3>Events</h3>
+    <div className="event_list-main_container">
+      <h2>Events</h2>
 
       <div className="event_list-days_range_main_container">
         <label>
@@ -43,7 +43,7 @@ export const EventsList: FC<EventsListProps> = ({
 
       <ul>
         {Object.entries(events).map(([group, groupEvents]) => (
-          <li key={group} className="event_list-group_container">
+          <li key={group}>
             <h4>{group}</h4>
             {groupEvents.map((singleEvent) => (
               <div key={singleEvent.id} className="event_list-event_container">
@@ -53,6 +53,6 @@ export const EventsList: FC<EventsListProps> = ({
           </li>
         ))}
       </ul>
-    </>
+    </div>
   );
 };

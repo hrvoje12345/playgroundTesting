@@ -10,3 +10,11 @@
   align-items: center;
   justify-content: center;
 }
+
+.event_list-main_container {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid black;
+  border-radius: 8px;
+  padding: 32px;
+}

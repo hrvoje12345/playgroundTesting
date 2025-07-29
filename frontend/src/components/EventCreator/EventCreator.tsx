@@ -69,7 +69,7 @@ export const EventCreator: FC<EventCreatorProps> = ({ setEvents }) => {
 
       <Button
         onClick={handleCreateEvent}
-        label="Create event"
+        label="Create new event"
         isLoading={isLoading}
         isDisabled={isCreateEventDisabled}
       />
