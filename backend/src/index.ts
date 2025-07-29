@@ -9,6 +9,7 @@ import { getEnv } from './utils/getEnv';
 import { EnvVariable } from './values/EnvVariable';
 
 import 'dotenv/config';
+import { authenticateController } from './domains/authenticate/authenticate.controller';
 
 const port = getEnv(EnvVariable.Port, true) || 8080;
 const frontendUrl = getEnv(EnvVariable.FrontendUrl, true) || 'http://localhost:3000';
@@ -28,6 +29,7 @@ app.use(express.json());
 
 googleOAuth(app);
 eventsController(app);
+authenticateController(app);
 
 app.listen(port, (error) => {
   if (error) {

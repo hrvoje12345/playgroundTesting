@@ -6,7 +6,8 @@ export const events = pgTable('events', {
   name: text().notNull(),
   startDate: timestamp().notNull(),
   endDate: timestamp().notNull(),
-  googleId: text()
+  googleId: text(),
+  email: text(),
 }, 
 (table) => ({
   uniqueEvent: unique().on(table.googleId),

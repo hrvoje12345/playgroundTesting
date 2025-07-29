@@ -1,10 +1,14 @@
 import passport from 'passport';
 import session from 'express-session';
+import moment from 'moment';
+import { google } from 'googleapis'
 import { Strategy } from 'passport-google-oauth20';
 
 import { getEnv } from '../utils/getEnv';
 import { EnvVariable } from '../values/EnvVariable';
 import { Path } from '../values/Path';
+import { mapEvents } from '../domains/events/events.repository';
+import { getGoogleCalendarApi, saveEvents } from '../domains/events/events.service';
 
 import type { Express } from 'express';
 
@@ -19,13 +23,11 @@ export const googleOAuth = (app: Express) => {
     app.use(passport.session());
 
     passport.serializeUser((user, done) => {
-        console.log('serializeUser', user)
         done(null, user);
     });
 
     passport.deserializeUser(async (user: any, done) => {
         try {
-
             done(null, user);
         } catch (error) {
             done(error, null);
@@ -39,21 +41,32 @@ export const googleOAuth = (app: Express) => {
             clientSecret: getEnv(EnvVariable.GoogleClientSecret),
             callbackURL: `${getEnv(EnvVariable.BackendUrl)}${Path.AuthGoogleCallback}`,
             },
-            (accessToken, refreshToken, profile, done) => {
-            try {
-                console.log('Strategy', { accessToken, refreshToken, profile });
+            async (accessToken, refreshToken, profile, done) => {
+                try {
+                    const calendar = getGoogleCalendarApi(accessToken);
 
-                // STORE USERS
+                    const events = await calendar.events.list({
+                        calendarId: 'primary',
+                        timeMin: moment().utc().add(-3, 'months').toISOString(),
+                        timeMax: moment().utc().add(3, 'months').toISOString(),
+                        maxResults: 2500,
+                        singleEvents: true,
+                        orderBy: 'startTime',
+                    });
 
-                return done(null, { user: profile, accessToken, refreshToken });
-            } catch (error) {
-                return done(error, false);
-            }
+                    if (events.data.items?.length) {
+                        await saveEvents(mapEvents(events.data.items, profile._json.email!));
+                    }
+
+                    return done(null, { user: {...profile, email: profile._json.email}, accessToken, refreshToken });
+                } catch (error) {
+                    return done(error, false);
+                }
             }
         )
     );
 
-    app.get(Path.AuthGoogle, passport.authenticate('google', { scope: ['profile', 'https://www.googleapis.com/auth/calendar'] }));
+    app.get(Path.AuthGoogle, passport.authenticate('google', { scope: ['profile', 'https://www.googleapis.com/auth/calendar', 'email'] }));
 
     app.get(Path.AuthGoogleCallback,
         passport.authenticate('google', { failureRedirect: `${getEnv(EnvVariable.FrontendUrl)}/login` }),

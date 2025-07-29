@@ -8,6 +8,13 @@
       "when": 1753792415823,
       "tag": "0000_burly_ben_urich",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1753801517414,
+      "tag": "0001_chemical_multiple_man",
+      "breakpoints": true
     }
   ]
 }
