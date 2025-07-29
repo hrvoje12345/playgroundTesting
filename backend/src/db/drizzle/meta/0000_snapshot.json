@@ -1,5 +1,5 @@
 {
-  "id": "e62485ab-6e14-4cf5-a60c-12b9d22395b6",
+  "id": "710c4eea-cf9f-4b89-80fa-3b7baa96da66",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -42,12 +42,26 @@
           "type": "timestamp",
           "primaryKey": false,
           "notNull": true
+        },
+        "google_id": {
+          "name": "google_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
+      "uniqueConstraints": {
+        "events_googleId_unique": {
+          "name": "events_googleId_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "google_id"
+          ]
+        }
+      },
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false
