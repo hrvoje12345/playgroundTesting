@@ -1,0 +1,1 @@
+export { events } from '../domains/events/events.schema';
