@@ -1,10 +1,14 @@
-import { FC } from "react";
+import { FC, Dispatch, SetStateAction} from "react";
 import './eventCreator.css'
 import { Button } from "../Button/Button";
 import { useEventCreator } from "./useEventCreator";
+import { Event } from "../../pages/HomePage/useHomePage";
 
+type EventCreatorProps = {
+    setEvents: Dispatch<SetStateAction<Event[]>>
+}
 
-export const EventCreator: FC = () => {
+export const EventCreator: FC<EventCreatorProps> = ({setEvents}) => {
     const {
         handleOnChange, 
         timeOptions, 
@@ -12,7 +16,7 @@ export const EventCreator: FC = () => {
         handleCreateEvent, 
         isLoading, 
         isCreateEventDisabled
-    } = useEventCreator();
+    } = useEventCreator(setEvents);
 
     return (
         <div className="event_creator-main_container">

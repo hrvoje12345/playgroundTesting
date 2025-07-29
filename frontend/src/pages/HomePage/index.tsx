@@ -1,12 +1,11 @@
-import { FC, useEffect, useState } from "react";
+import { FC } from "react";
 import { EventsList } from "../../components/EventsList/EventsList";
 import { EventCreator } from "../../components/EventCreator/EventCreator";
 import { useHomePage } from "./useHomePage";
-
-const {REACT_APP_API_URL} = process.env
+import { Button } from "../../components/Button/Button";
 
 export const HomePage: FC = () => {
-    const {isLoading, renderableEvents} = useHomePage();
+    const {isLoading, renderableEvents, setRenderableEvents, handleRefresh} = useHomePage();
 
     if (isLoading) {
         return <p>Loading...</p>
@@ -14,7 +13,8 @@ export const HomePage: FC = () => {
 
     return (
         <>
-            <EventCreator />
+            <EventCreator setEvents={setRenderableEvents}/>
+            <Button onClick={handleRefresh} label="Refresh calendar"/>
             <EventsList events={renderableEvents}/>
         </>
     )

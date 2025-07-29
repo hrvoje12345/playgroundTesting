@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { fetchApi } from "../../utils/fetchApi";
 
 const availabeDaysRange = [3,7,9]
 
@@ -11,7 +10,7 @@ export const useEventList = () => {
         setIsLoading(false) 
 
         try {
-            const response = fetchApi('someRoute', {method: 'POST', body: JSON.stringify(daysRange)})
+            const response = fetch('someRoute', {method: 'POST', body: JSON.stringify(daysRange)})
         } catch(error: unknown) {
             console.error(error)
         } finally {

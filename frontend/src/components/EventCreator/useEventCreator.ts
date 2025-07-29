@@ -1,11 +1,13 @@
-import { useState } from "react";
-import { fetchApi } from "../../utils/fetchApi";
+import { Dispatch, SetStateAction, useState } from "react";
 import { generateTimeOptions } from "../../utils/generateTimeOptions";
+import { Event } from "../../pages/HomePage/useHomePage";
 
 const timeOptions = generateTimeOptions()
 const defaultTime = '00:00'
 
-export const useEventCreator = () => {
+const {REACT_APP_API_URL} = process.env;
+
+export const useEventCreator = (setEvents: Dispatch<SetStateAction<Event[]>>) => {
     const [details, setDetails] = useState({eventName: '', date: '', startTime: defaultTime, endTime: defaultTime})
     const [isLoading, setIsLoading] = useState(false);
 
@@ -19,13 +21,15 @@ export const useEventCreator = () => {
         setIsLoading(true)
 
         try {
-            const response = await fetchApi('events', {method: 'POST', body: JSON.stringify(details)})
+            const createResponse = await fetch(`${REACT_APP_API_URL}/events`, {method: "POST", credentials: 'include', body: JSON.stringify(details), headers: {'Content-Type': 'application/json'}});
 
-            if (!response.ok) {
+            if (!createResponse.ok) {
                 setIsLoading(false)
             }
 
+            const createdEvent = await createResponse.json();
 
+            setEvents((oldEvents) => [...oldEvents, createdEvent])
         } catch(error: unknown) {
             console.error(error);
         } finally {
