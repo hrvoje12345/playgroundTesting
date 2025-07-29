@@ -1,4 +1,5 @@
 import { FC } from "react";
+import './event.css'
 
 type EventProps = {
     details: {name: string;
@@ -8,7 +9,7 @@ type EventProps = {
 
 export const Event: FC<EventProps> = ({details}) => {
     return (
-        <div>
+        <div className="event-mainContainer">
             <h5>{details.name}</h5>
             <p>Starting at: {details.start}</p>
             <p>Ending at: {details.end}</p>

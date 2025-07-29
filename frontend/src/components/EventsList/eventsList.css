@@ -1,0 +1,12 @@
+.eventList-eventContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: fit-content;
+}
+
+.eventList-daysRangeMainContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
