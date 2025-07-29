@@ -23,10 +23,8 @@ export const googleOAuth = (app: Express) => {
         done(null, user);
     });
 
-    passport.deserializeUser(async (id, done) => {
+    passport.deserializeUser(async (user: any, done) => {
         try {
-            const user = { user: 'todo1' };
-            console.log('deserializeUser', id, user)
 
             done(null, user);
         } catch (error) {
@@ -47,7 +45,7 @@ export const googleOAuth = (app: Express) => {
 
                 // STORE USERS
 
-                return done(null, { user: 'todo' });
+                return done(null, { user: profile, accessToken, refreshToken });
             } catch (error) {
                 return done(error, false);
             }
@@ -55,12 +53,25 @@ export const googleOAuth = (app: Express) => {
         )
     );
 
-    app.get(Path.AuthGoogle, passport.authenticate('google', { scope: ['profile'] }));
+    app.get(Path.AuthGoogle, passport.authenticate('google', { scope: ['profile', 'https://www.googleapis.com/auth/calendar'] }));
 
-    app.get(Path.AuthGoogleCallback, 
-        passport.authenticate('google', { successRedirect: getEnv(EnvVariable.FrontendUrl), failureRedirect: `${getEnv(EnvVariable.FrontendUrl)}/login` }),
+    app.get(Path.AuthGoogleCallback,
+        passport.authenticate('google', { failureRedirect: `${getEnv(EnvVariable.FrontendUrl)}/login` }),
         (request, response, next) => {
-            response.redirect('/');
+            const user = request.user as any;
+
+            if (!user || !user.accessToken) {
+                return response.redirect(`${getEnv(EnvVariable.FrontendUrl)}/login`);
+            }
+
+            response.cookie('accessToken', user.accessToken, {
+                httpOnly: true,          
+                secure: true,            
+                sameSite: 'lax',         
+                maxAge: 1000 * 60 * 60,  
+            });
+
+            response.redirect(`${getEnv(EnvVariable.FrontendUrl)}/`);
             next(); 
         }
     );

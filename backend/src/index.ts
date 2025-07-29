@@ -1,4 +1,6 @@
 import express from 'express';
+import cors from 'cors';
+import cookieParser from 'cookie-parser';
 
 import { googleOAuth } from './auth/googleOAuth';
 import { eventsController } from './domains/events/events.controller';
@@ -9,10 +11,17 @@ import { EnvVariable } from './values/EnvVariable';
 import 'dotenv/config';
 
 const port = getEnv(EnvVariable.Port, true) || 8080;
+const frontendUrl = getEnv(EnvVariable.FrontendUrl, true) || 'http://localhost:3000';
 
 initializeDbCLient();
 
 const app = express();
+
+app.use(cookieParser());
+app.use(cors({
+  origin: frontendUrl,
+  credentials: true,
+}));
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
