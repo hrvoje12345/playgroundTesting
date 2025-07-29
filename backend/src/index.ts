@@ -11,27 +11,25 @@ import { EnvVariable } from './values/EnvVariable';
 import 'dotenv/config';
 import { authenticateController } from './domains/authenticate/authenticate.controller';
 
-const port = getEnv(EnvVariable.Port, true) || 8080;
-const frontendUrl = getEnv(EnvVariable.FrontendUrl, true) || 'http://localhost:3000';
-
-initializeDbCLient();
-
 const app = express();
 
 app.use(cookieParser());
-app.use(cors({
-  origin: frontendUrl,
-  credentials: true,
-}));
+app.use(
+  cors({
+    origin: getEnv(EnvVariable.FrontendUrl),
+    credentials: true,
+  }),
+);
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+initializeDbCLient();
 googleOAuth(app);
 eventsController(app);
 authenticateController(app);
 
-app.listen(port, (error) => {
+app.listen(getEnv(EnvVariable.Port), (error) => {
   if (error) {
     throw error;
   }

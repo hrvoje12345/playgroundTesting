@@ -1,13 +1,13 @@
 .login-main_container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding-top: 32px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-top: 32px;
 }
 
 .login-title {
-    width: fit-content;
-    margin-top: 0;
-    margin-bottom: 32px;
+  width: fit-content;
+  margin-top: 0;
+  margin-bottom: 32px;
 }

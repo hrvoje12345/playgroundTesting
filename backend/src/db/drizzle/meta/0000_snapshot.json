@@ -57,9 +57,7 @@
         "events_googleId_unique": {
           "name": "events_googleId_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "google_id"
-          ]
+          "columns": ["google_id"]
         }
       },
       "policies": {},

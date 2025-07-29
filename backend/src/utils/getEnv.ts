@@ -1,10 +1,7 @@
 import { ServerError } from '../errors/ServerError';
 import { EnvVariable } from '../values/EnvVariable';
 
-export const getEnv = (
-  variableName: EnvVariable,
-  isOptional = false,
-) => {
+export const getEnv = (variableName: EnvVariable, isOptional = false) => {
   const value = process.env[variableName];
 
   if (!value && !isOptional) {

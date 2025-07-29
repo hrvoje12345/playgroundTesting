@@ -8,15 +8,15 @@ import * as schema from './schema';
 let clientInstance: PostgresJsDatabase<typeof schema> | null = null;
 
 export const initializeDbCLient = () => {
-    if (!clientInstance) {
-        const sql = postgres(getEnv(EnvVariable.DatabaseUrl), { ssl: 'require' });
+  if (!clientInstance) {
+    const sql = postgres(getEnv(EnvVariable.DatabaseUrl), { ssl: 'require' });
 
-        clientInstance = drizzle(sql, { schema, casing: 'snake_case' });
-    }
+    clientInstance = drizzle(sql, { schema, casing: 'snake_case' });
+  }
 
-    return clientInstance;
-}
+  return clientInstance;
+};
 
 export const dbClient = () => {
-    return initializeDbCLient();
-}
+  return initializeDbCLient();
+};

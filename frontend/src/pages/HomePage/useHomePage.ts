@@ -1,58 +1,102 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
-const {REACT_APP_API_URL} = process.env
+const { REACT_APP_API_URL } = process.env;
 
 export type Event = {
-    id: string;
-    name: string;
-    startDate: string;
-    endDate: string;
+  id: string;
+  name: string;
+  startDate: string;
+  endDate: string;
 };
 
+const availabeDaysRange = ['1', '7', '30'];
+
 export const useHomePage = () => {
-    const [renderableEvents, setRenderableEvents] = useState<Event[]>([]);
-    const [isLoading, setIsLoading] = useState(false);
+  const [renderableEvents, setRenderableEvents] = useState<
+    Record<string, Event[]>
+  >({});
+  const [isLoading, setIsLoading] = useState(false);
+  const [daysRange, setDaysRange] = useState('7');
 
-    const handleRefresh = async () => {
-        setIsLoading(true);
+  const handleDaysRangeSubmit = async () => {
+    setIsLoading(false);
 
-        try {
-            const refreshResponse = await fetch(`${REACT_APP_API_URL}/events`, {method: "PUT", credentials: 'include'});
-            if (!refreshResponse.ok) {
-                setIsLoading(false);
-            }
+    try {
+      const response = await fetch(
+        `${REACT_APP_API_URL}/events?range=${daysRange}`,
+        { method: 'GET', credentials: 'include' },
+      );
 
-            const refreshedEvents = await refreshResponse.json();
-            setIsLoading(refreshedEvents);
-        } catch(error: unknown) {
-            console.error(error);
-        } finally {
-            setIsLoading(false);
-        }
+      if (!response.ok) {
+        setIsLoading(false);
+      }
+
+      const refreshedEvents = await response.json();
+      setRenderableEvents(refreshedEvents);
+    } catch (error: unknown) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
     }
+  };
 
+  const handleRefresh = async () => {
+    setIsLoading(true);
 
-    const getEvents = async () => {
-        setIsLoading(true)
-        try {
-            const eventsResponse = await fetch(`${REACT_APP_API_URL}/events`, {method: "GET", credentials: 'include'});
+    try {
+      const refreshResponse = await fetch(
+        `${REACT_APP_API_URL}/events?range=${daysRange}`,
+        {
+          method: 'PUT',
+          credentials: 'include',
+        },
+      );
+      if (!refreshResponse.ok) {
+        setIsLoading(false);
+      }
 
-            if (!eventsResponse.ok) {
-                setIsLoading(false)
-            }
-
-            const events = await eventsResponse.json()
-            setRenderableEvents(events)
-        } catch(error: unknown) {
-            console.error(error)
-        } finally {
-            setIsLoading(false)
-        }
+      const refreshedEvents = await refreshResponse.json();
+      setIsLoading(refreshedEvents);
+    } catch (error: unknown) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
     }
+  };
 
-    useEffect(() => {
-        getEvents()
-    }, []);
+  const getEvents = async () => {
+    setIsLoading(true);
+    try {
+      const eventsResponse = await fetch(
+        `${REACT_APP_API_URL}/events?range=${daysRange}`,
+        { method: 'GET', credentials: 'include' },
+      );
 
-    return {isLoading, renderableEvents, setRenderableEvents, handleRefresh};
-}
+      if (!eventsResponse.ok) {
+        setIsLoading(false);
+      }
+
+      const events = await eventsResponse.json();
+      setRenderableEvents(events);
+    } catch (error: unknown) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getEvents();
+  }, []);
+
+  return {
+    isLoading,
+    renderableEvents,
+    setRenderableEvents,
+    handleRefresh,
+    daysRange,
+    setDaysRange,
+    handleDaysRangeSubmit,
+    availabeDaysRange,
+  };
+};

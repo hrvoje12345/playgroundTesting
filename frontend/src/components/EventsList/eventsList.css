@@ -1,12 +1,12 @@
-.eventList-eventContainer {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: fit-content;
+.event_list-event_container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: fit-content;
 }
 
-.eventList-daysRangeMainContainer {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.event_list-days_range_main_container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
