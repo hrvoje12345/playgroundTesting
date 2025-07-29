@@ -1,22 +1,28 @@
-import { FC, useEffect } from "react";
+import { FC, useEffect, useState } from "react";
 import { EventsList } from "../../components/EventsList/EventsList";
 import { EventCreator } from "../../components/EventCreator/EventCreator";
-
-const eventsMock = [
-    {name: 'Event 1', start: new Date().toDateString(), end: new Date().toDateString(), id: '1'},
-    {name: 'Event 2', start: new Date().toDateString(), end: new Date().toDateString(), id: '2'},
-];
 
 const {REACT_APP_API_URL} = process.env
 
 export const HomePage: FC = () => {
+    const [renderableEvents, setRenderableEvents] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
+
     const getEvents = async () => {
+        setIsLoading(true)
         try {
             const eventsResponse = await fetch(`${REACT_APP_API_URL}/events`, {method: "GET", credentials: 'include'});
 
+            if (!eventsResponse.ok) {
+                setIsLoading(false)
+            }
+
             const events = await eventsResponse.json()
+            setRenderableEvents(events)
         } catch(error: unknown) {
             console.error(error)
+        } finally {
+            setIsLoading(false)
         }
     }
 
@@ -24,10 +30,14 @@ export const HomePage: FC = () => {
         getEvents()
     }, [])
 
+    if (isLoading) {
+        return <p>Loading...</p>
+    }
+
     return (
         <>
             <EventCreator />
-            <EventsList events={eventsMock}/>
+            <EventsList events={renderableEvents}/>
         </>
     )
 };

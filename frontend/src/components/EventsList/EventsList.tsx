@@ -5,7 +5,7 @@ import { Button } from "../Button/Button";
 import { useEventList } from "./useEventList";
 
 type EventsListProps = {
-    events: {name: string, start: string, end: string, id: string}[]
+    events: {name: string, startDate: string, endDate: string, id: string}[]
 }
 
 

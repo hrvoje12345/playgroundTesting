@@ -3,16 +3,17 @@ import './event.css'
 
 type EventProps = {
     details: {name: string;
-    start: string;
-    end: string;}
+    startDate: string;
+    endDate: string;
+}
 }
 
 export const Event: FC<EventProps> = ({details}) => {
     return (
         <div className="event-mainContainer">
             <h5>{details.name}</h5>
-            <p>Starting at: {details.start}</p>
-            <p>Ending at: {details.end}</p>
+            <p>Starting at: {new Date(details.startDate).toString()}</p>
+            <p>Ending at: {new Date(details.endDate).toString()}</p>
         </div>
     )
 };
